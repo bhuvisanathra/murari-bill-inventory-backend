@@ -7,8 +7,7 @@ import com.billapp.billapp.dao.*;
 import com.billapp.billapp.dto.*;
 import com.billapp.billapp.entities.*;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.*;
 import jakarta.transaction.*;
 
 
@@ -62,11 +61,34 @@ public List<InvoiceDetailsDTO> getInvoiceDetails() {
 
 
 
-    @Override
-    public clientDetails getInvoiceDetail(int invoiceId) {
-        clientDetails InvoiceDetail=(clientDetails)bDao.getOne(invoiceId);
-        return InvoiceDetail;
+@Override
+public InvoiceDetailsDTO getInvoiceDetail(int invoiceId) {
+    String jpql = "SELECT c, id, il FROM clientDetails c LEFT JOIN FETCH c.invoiceDetails id LEFT JOIN FETCH c.invoices il WHERE c.id = :invoiceId";
+    List<Object[]> resultList = entityManager.createQuery(jpql)
+                                            .setParameter("invoiceId", invoiceId)
+                                            .getResultList();
+    if (resultList.isEmpty()) {
+        return null;
     }
+    Map<Integer, InvoiceDetailsDTO> invoiceDetailsMap = new HashMap<>();
+    for (Object[] result : resultList) {
+        clientDetails clientDetails = (clientDetails) result[0];
+        invoiceDetails invoiceDetails = (invoiceDetails) result[1];
+        invoiceList invoiceListItem = (invoiceList) result[2];
+        System.out.println(invoiceListItem);
+        if (!invoiceDetailsMap.containsKey(clientDetails.getId())) {
+            InvoiceDetailsDTO dto = new InvoiceDetailsDTO();
+            dto.setCd(clientDetails);
+            dto.setId(invoiceDetails);
+            dto.setIl(new ArrayList<>());
+            invoiceDetailsMap.put(clientDetails.getId(), dto);
+        }
+        invoiceDetailsMap.get(clientDetails.getId()).getIl().add(invoiceListItem);
+    }
+    return invoiceDetailsMap.values().iterator().next();
+}
+
+
 
     @Override
     public clientDetails addInvoiceDetail(clientDetails InvoiceDetail) {

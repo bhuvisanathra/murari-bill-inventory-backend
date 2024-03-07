@@ -40,5 +40,14 @@ public class InvoiceDetailsDTO {
         this.il = il;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+            " cd='" + getCd() + "'" +
+            ", id='" + getId() + "'" +
+            ", il='" + getIl() + "'" +
+            "}";
+    }
+
 
 }

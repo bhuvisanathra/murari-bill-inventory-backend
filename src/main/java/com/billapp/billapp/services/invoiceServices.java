@@ -7,7 +7,7 @@ import com.billapp.billapp.entities.*;
 
 public interface invoiceServices {
     public List<InvoiceDetailsDTO> getInvoiceDetails();
-    public clientDetails getInvoiceDetail(int invoiceId);
+    public InvoiceDetailsDTO getInvoiceDetail(int invoiceId);
     public clientDetails addInvoiceDetail(clientDetails InvoiceDetail);
     public clientDetails updateInvoiceDetail(clientDetails InvoiceDetail);
     public void deleteInvoiceDetail(int invoiceId);

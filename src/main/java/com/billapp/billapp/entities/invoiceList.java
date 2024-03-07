@@ -116,4 +116,28 @@ public class invoiceList {
     public void setClientDetails(clientDetails clientDetails) {
         this.clientDetails = clientDetails;
     }
+
+    public Double getDiscount() {
+        return this.discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + getId() + "'" +
+            ", srNo='" + getSrNo() + "'" +
+            ", productDetail='" + getProductDetail() + "'" +
+            ", kgOrGram='" + getKgOrGram() + "'" +
+            ", rate='" + getRate() + "'" +
+            ", value='" + getValue() + "'" +
+            ", discount='" + getDiscount() + "'" +
+            ", clientDetails='" + getClientDetails() + "'" +
+            "}";
+    }
+
 }

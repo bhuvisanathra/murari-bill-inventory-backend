@@ -24,7 +24,7 @@ public class BillController {
 
     // Get invoice by id
     @GetMapping("/invoices/{invoiceId}")
-    public clientDetails getInvoiceDetail(@PathVariable int invoiceId){
+    public InvoiceDetailsDTO getInvoiceDetail(@PathVariable int invoiceId){
             return this.invoiceServices.getInvoiceDetail(invoiceId);
     }
 
