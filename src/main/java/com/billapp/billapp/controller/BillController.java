@@ -9,7 +9,7 @@ import com.billapp.billapp.entities.*;
 import com.billapp.billapp.services.*;
 
 @RestController
-@CrossOrigin(origins="http://localhost:5173/")
+@CrossOrigin(origins="https://muraribhuvi.netlify.app/")
 public class BillController {
 
     @Autowired
