@@ -67,16 +67,17 @@ public class invoiceDetails {
     }
 
     public invoiceDetails(Map<String, Object> map) {
-        this.paymentType=map.get("paymentType").toString();
-        this.grandTotal = Double.parseDouble(map.get("grandTotal").toString());
-        this.roundOff = Double.parseDouble(map.get("roundOff").toString());
-        this.shippingCharges = Double.parseDouble(map.get("shippingCharges").toString());
-        this.totalAfterDiscount = Double.parseDouble(map.get("totalAfterDiscount").toString());
-        this.totalCgst = Double.parseDouble(map.get("totalCgst").toString());
-        this.totalDiscount = Double.parseDouble(map.get("totalDiscount").toString());
-        this.totalSgst = Double.parseDouble(map.get("totalSgst").toString());
-        this.totalValue = Double.parseDouble(map.get("totalValue").toString());
+        this.paymentType = map.getOrDefault("paymentType", "").toString();
+        this.grandTotal = map.get("grandTotal") != null ? Double.parseDouble(map.get("grandTotal").toString()) : 0.0;
+        this.roundOff = map.get("roundOff") != null ? Double.parseDouble(map.get("roundOff").toString()) : 0.0;
+        this.shippingCharges = map.get("shippingCharges") != null ? Double.parseDouble(map.get("shippingCharges").toString()) : 0.0;
+        this.totalAfterDiscount = map.get("totalAfterDiscount") != null ? Double.parseDouble(map.get("totalAfterDiscount").toString()) : 0.0;
+        this.totalCgst = map.get("totalCgst") != null ? Double.parseDouble(map.get("totalCgst").toString()) : 0.0;
+        this.totalDiscount = map.get("totalDiscount") != null ? Double.parseDouble(map.get("totalDiscount").toString()) : 0.0;
+        this.totalSgst = map.get("totalSgst") != null ? Double.parseDouble(map.get("totalSgst").toString()) : 0.0;
+        this.totalValue = map.get("totalValue") != null ? Double.parseDouble(map.get("totalValue").toString()) : 0.0;
     }
+    
 
     // Getters and setters
 
