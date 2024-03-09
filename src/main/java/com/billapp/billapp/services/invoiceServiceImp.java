@@ -105,7 +105,10 @@ public InvoiceDetailsDTO getInvoiceDetail(int invoiceId) {
 
     @Override
     public void deleteInvoiceDetail(int invoiceId) {
-        bDao.deleteById(invoiceId);
+
+        Optional<clientDetails> o = bDao.findById(invoiceId);
+        bDao.delete(o.get());
+
     }
 
     @Override
