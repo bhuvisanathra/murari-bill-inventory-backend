@@ -42,9 +42,9 @@ public class ProductController {
         return this.ps.updateProduct(p);
     }
 
-    @DeleteMapping("/product")
-    public Product deleteProduct(@RequestBody Product p){
-        return this.ps.deleteProduct(p);
+    @DeleteMapping("/product/{productId}")
+    public Product deleteProduct(@PathVariable Long productId){
+        return this.ps.deleteProduct(productId);
     }
 
 

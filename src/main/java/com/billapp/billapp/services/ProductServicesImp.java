@@ -39,9 +39,11 @@ public class ProductServicesImp  implements ProductServices{
     }
 
     @Override
-    public Product deleteProduct(Product product) {
-        pd.delete(product);
-        return product;
+    public Product deleteProduct(Long product) {
+        Optional<Product> optionalProduct = pd.findById(product);
+        Product p =optionalProduct.get();
+        pd.delete(p);
+        return p;
     }
     
 }

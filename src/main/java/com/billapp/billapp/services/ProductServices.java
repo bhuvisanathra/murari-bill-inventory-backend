@@ -10,6 +10,6 @@ public interface ProductServices {
     public Product addProduct(Product p);
     public Product getProductbyId(Long id);
     public Product updateProduct(Product p);
-    public Product deleteProduct(Product p);
+    public Product deleteProduct(Long p);
     
 }
