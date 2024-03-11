@@ -16,7 +16,7 @@ public class clientDetails {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "client_name")
     private String clientName;
@@ -51,7 +51,7 @@ public class clientDetails {
     public clientDetails() {
     }
     
-    public clientDetails(int id, String ClientName, String ClientAddress, String clientGST, String clientPOS, String clientState, String clientStateCode, Date invoiceDate) {
+    public clientDetails(Long id, String ClientName, String ClientAddress, String clientGST, String clientPOS, String clientState, String clientStateCode, Date invoiceDate) {
         this.id = id;
         this.clientName = ClientName;
         this.clientAddress = ClientAddress;
@@ -78,11 +78,11 @@ public class clientDetails {
     }
 
 
-    public int getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

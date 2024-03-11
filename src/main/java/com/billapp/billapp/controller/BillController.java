@@ -2,6 +2,7 @@ package com.billapp.billapp.controller;
 
 import java.util.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.billapp.billapp.dto.InvoiceDetailsDTO;
@@ -29,7 +30,7 @@ public class BillController {
     }
 
     @PostMapping("/invoices")
-    public void addInvoiceDetail(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<Long> addInvoiceDetail(@RequestBody Map<String, Object> payload) {
 
         Map<String, Object> clientDetailsMap = (Map<String, Object>) payload.get("clientDetails");
         Map<String, Object> invoiceDetailsMap = (Map<String, Object>) payload.get("invoiceDetails");
@@ -48,7 +49,8 @@ public class BillController {
             }
         }
         
-        this.invoiceServices.saveInvoiceDetails(clientDetails, invoiceDetails, invoiceList);
+        Long clientId = this.invoiceServices.saveInvoiceDetails(clientDetails, invoiceDetails, invoiceList);
+        return ResponseEntity.ok(clientId);
     }   
 
 
@@ -61,7 +63,7 @@ public class BillController {
     
     //Delete the invoice
     @DeleteMapping("/invoices/{invoiceId}")
-    public void deleteInvoiceDetail(@PathVariable int invoiceId){
+    public void deleteInvoiceDetail(@PathVariable Long invoiceId){
         this.invoiceServices.deleteInvoiceDetail(invoiceId);
     }
 }

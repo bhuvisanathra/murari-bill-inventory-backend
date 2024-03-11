@@ -35,7 +35,7 @@ public List<InvoiceDetailsDTO> getInvoiceDetails() {
     String jpql = "SELECT c, id, il FROM clientDetails c LEFT JOIN c.invoiceDetails id LEFT JOIN c.invoices il ON c.id = il.clientDetails.id";
     List<Object[]> resultList = entityManager.createQuery(jpql).getResultList();
 
-    Map<Integer, InvoiceDetailsDTO> invoiceDetailsMap = new HashMap<>();
+    Map<Long, InvoiceDetailsDTO> invoiceDetailsMap = new HashMap<>();
 
     for (Object[] result : resultList) {
         clientDetails clientDetails = (clientDetails) result[0];    
@@ -70,7 +70,7 @@ public InvoiceDetailsDTO getInvoiceDetail(int invoiceId) {
     if (resultList.isEmpty()) {
         return null;
     }
-    Map<Integer, InvoiceDetailsDTO> invoiceDetailsMap = new HashMap<>();
+    Map<Long, InvoiceDetailsDTO> invoiceDetailsMap = new HashMap<>();
     for (Object[] result : resultList) {
         clientDetails clientDetails = (clientDetails) result[0];
         invoiceDetails invoiceDetails = (invoiceDetails) result[1];
@@ -104,7 +104,7 @@ public InvoiceDetailsDTO getInvoiceDetail(int invoiceId) {
     }
 
     @Override
-    public void deleteInvoiceDetail(int invoiceId) {
+    public void deleteInvoiceDetail(Long invoiceId) {
 
         Optional<clientDetails> o = bDao.findById(invoiceId);
         bDao.delete(o.get());
@@ -113,8 +113,8 @@ public InvoiceDetailsDTO getInvoiceDetail(int invoiceId) {
 
     @Override
     @Transactional
-    public void saveInvoiceDetails(clientDetails clientDetails, invoiceDetails invoiceDetails, List<invoiceList> invoiceList) {
-        if (clientDetails != null && clientDetails.getId() == 0) {
+    public Long saveInvoiceDetails(clientDetails clientDetails, invoiceDetails invoiceDetails, List<invoiceList> invoiceList) {
+        if (clientDetails != null && clientDetails.getId() == null) {
             bDao.save(clientDetails);
         }
         
@@ -129,6 +129,7 @@ public InvoiceDetailsDTO getInvoiceDetail(int invoiceId) {
             }
             invoiceListDao.saveAll(invoiceList);
         }
+        return clientDetails.getId();
     }
 
 }
