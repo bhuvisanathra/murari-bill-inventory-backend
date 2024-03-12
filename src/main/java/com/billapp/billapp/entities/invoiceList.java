@@ -1,10 +1,7 @@
 package com.billapp.billapp.entities;
 
 import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -15,25 +12,25 @@ public class invoiceList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "invoice_id")
     private Long id;
-    
+
     @Column(name = "srNo")
     private Double srNo;
-    
+
     @Column(name = "productDetail")
     private String productDetail;
-    
+
     @Column(name = "kgOrGram")
     private Double kgOrGram;
-    
+
     @Column(name = "rate")
     private Double rate;
-    
+
     @Column(name = "value")
     private Double value;
-    
+
     @Column(name = "disc")
     private Double discount;
-    
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "client_id")
@@ -42,7 +39,8 @@ public class invoiceList {
     public invoiceList() {
     }
 
-    public invoiceList(Long id, Double srNo, String productDetail, Double kgOrGram, Double rate, Double value, clientDetails clientDetails) {
+    public invoiceList(Long id, Double srNo, String productDetail, Double kgOrGram, Double rate, Double value,
+            clientDetails clientDetails) {
         this.id = id;
         this.srNo = srNo;
         this.productDetail = productDetail;
@@ -125,19 +123,18 @@ public class invoiceList {
         this.discount = discount;
     }
 
-
     @Override
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
-            ", srNo='" + getSrNo() + "'" +
-            ", productDetail='" + getProductDetail() + "'" +
-            ", kgOrGram='" + getKgOrGram() + "'" +
-            ", rate='" + getRate() + "'" +
-            ", value='" + getValue() + "'" +
-            ", discount='" + getDiscount() + "'" +
-            ", clientDetails='" + getClientDetails() + "'" +
-            "}";
+                " id='" + getId() + "'" +
+                ", srNo='" + getSrNo() + "'" +
+                ", productDetail='" + getProductDetail() + "'" +
+                ", kgOrGram='" + getKgOrGram() + "'" +
+                ", rate='" + getRate() + "'" +
+                ", value='" + getValue() + "'" +
+                ", discount='" + getDiscount() + "'" +
+                ", clientDetails='" + getClientDetails() + "'" +
+                "}";
     }
 
 }

@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.billapp.billapp.dto.InvoiceDetailsDTO;
-import com.billapp.billapp.entities.*;
 import com.billapp.billapp.services.*;
 
 @RestController
@@ -38,7 +37,7 @@ public class BillController {
     @PutMapping("/invoices/{clientId}")
     public ResponseEntity<Long> updateInvoiceDetail(@PathVariable Long clientId,
             @RequestBody Map<String, Object> payload) {
-                System.out.println("\n\n\nPayload"+payload+"\n\n\n");
+        System.out.println("\n\n\nPayload" + payload + "\n\n\n");
         return ResponseEntity.ok(this.invoiceServices.updateInvoiceDetail(clientId, payload));
     }
 

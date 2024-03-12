@@ -3,7 +3,6 @@ package com.billapp.billapp.services;
 import java.sql.Date;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -33,6 +32,7 @@ public class invoiceServiceImp implements invoiceServices {
     private EntityManager entityManager;
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<InvoiceDetailsDTO> getInvoiceDetails() {
         String jpql = "SELECT c, id, il FROM clientDetails c LEFT JOIN c.invoiceDetails id LEFT JOIN c.invoices il ON c.id = il.clientDetails.id";
         List<Object[]> resultList = entityManager.createQuery(jpql).getResultList();
@@ -42,27 +42,21 @@ public class invoiceServiceImp implements invoiceServices {
         for (Object[] result : resultList) {
             clientDetails clientDetails = (clientDetails) result[0];
             invoiceDetails invoiceDetails = (invoiceDetails) result[1];
-            invoiceList invoiceListItem = (invoiceList) result[2]; // Retrieve the individual invoiceList object
-
+            invoiceList invoiceListItem = (invoiceList) result[2];
             if (!invoiceDetailsMap.containsKey(clientDetails.getId())) {
-                // If the client ID is not in the map, create a new InvoiceDetailsDTO object
                 InvoiceDetailsDTO dto = new InvoiceDetailsDTO();
                 dto.setCd(clientDetails);
                 dto.setId(invoiceDetails);
                 dto.setIl(new ArrayList<>());
                 invoiceDetailsMap.put(clientDetails.getId(), dto);
             }
-
-            // Add the invoiceListItem to the list in the corresponding InvoiceDetailsDTO
-            // object
             invoiceDetailsMap.get(clientDetails.getId()).getIl().add(invoiceListItem);
         }
-
-        // Return the values of the map, which contain the aggregated data
         return new ArrayList<>(invoiceDetailsMap.values());
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public InvoiceDetailsDTO getInvoiceDetail(int invoiceId) {
         String jpql = "SELECT c, id, il FROM clientDetails c LEFT JOIN FETCH c.invoiceDetails id LEFT JOIN FETCH c.invoices il WHERE c.id = :invoiceId";
         List<Object[]> resultList = entityManager.createQuery(jpql)
@@ -97,6 +91,7 @@ public class invoiceServiceImp implements invoiceServices {
     }
 
     @Override
+    @SuppressWarnings({ "unchecked", "unused" })
     public Long updateInvoiceDetail(Long clientId, Map<String, Object> payload) {
         Optional<clientDetails> clientDetailsOptional = bDao.findById(clientId);
         Optional<invoiceDetails> invoiceDetailsOptional = iDao.findById(clientId);
@@ -104,8 +99,6 @@ public class invoiceServiceImp implements invoiceServices {
         if (clientDetailsOptional.isPresent() || invoiceDetailsOptional.isPresent()) {
             clientDetails clientDetails = clientDetailsOptional.get();
             invoiceDetails invoiceDetails = invoiceDetailsOptional.get();
-
-            // Update client details
             if (payload.containsKey("clientDetails")) {
                 Map<String, Object> clientDetailsMap = (Map<String, Object>) payload.get("clientDetails");
                 clientDetails.setClientName((String) clientDetailsMap.get("clientName"));
@@ -117,8 +110,6 @@ public class invoiceServiceImp implements invoiceServices {
                 clientDetails.setClientDate(Date.valueOf((String) clientDetailsMap.get("invoiceDate")));
                 bDao.save(clientDetails);
             }
-
-            // Update invoice details
             if (payload.containsKey("invoiceDetails")) {
                 Map<String, Object> invoiceDetailsMap = (Map<String, Object>) payload.get("invoiceDetails");
                 invoiceDetails.setPaymentType((String) invoiceDetailsMap.get("paymentType"));
@@ -160,7 +151,6 @@ public class invoiceServiceImp implements invoiceServices {
                                 clientId);
                         if (invoiceOptional.isPresent()) {
                             invoiceList invoice = invoiceOptional.get();
-                            // Update invoiceList entity with data from the payload
                             invoice.setProductDetail((String) itemMap.get("productDetail"));
                             invoice.setKgOrGram(
                                     itemMap.get("kgOrGram") != null ? getDoubleValue(itemMap.get("kgOrGram")) : null);
@@ -171,7 +161,6 @@ public class invoiceServiceImp implements invoiceServices {
                                     itemMap.get("disc") != null ? getDoubleValue(itemMap.get("disc")) : null);
                             invoiceListDao.save(invoice);
                         } else {
-                            // Create a new invoiceList entity
                             invoiceList newInvoice = new invoiceList();
                             newInvoice.setSrNo(srNo.doubleValue());
                             newInvoice.setClientDetails(clientDetails);
@@ -206,7 +195,6 @@ public class invoiceServiceImp implements invoiceServices {
         } else if (value instanceof Double) {
             return (Double) value;
         } else {
-            // Handle other cases or throw an exception if necessary
             return null;
         }
     }
@@ -221,6 +209,7 @@ public class invoiceServiceImp implements invoiceServices {
 
     @Override
     @Transactional
+    @SuppressWarnings("unchecked")
     public Map<String, Object> saveInvoiceDetails(@RequestBody Map<String, Object> payload) {
         Map<String, Object> clientDetailsMap = (Map<String, Object>) payload.get("clientDetails");
         Map<String, Object> invoiceDetailsMap = (Map<String, Object>) payload.get("invoiceDetails");
@@ -236,7 +225,6 @@ public class invoiceServiceImp implements invoiceServices {
             }
         }
 
-        // Save client details if it's new
         if (clientDetails != null && clientDetails.getId() == null) {
             bDao.save(clientDetails);
         }
@@ -255,15 +243,9 @@ public class invoiceServiceImp implements invoiceServices {
             invoiceListDao.saveAll(invoiceList);
         }
 
-        // Construct and return the map containing IDs
         Map<String, Object> result = new HashMap<>();
         result.put("invoiceIdAfterDB", clientDetails != null ? clientDetails.getId() : null);
         result.put("invoiceDetailsIdAfterDB", invoiceDetails != null ? invoiceDetails.getId() : null);
-        List<Long> invoiceListIds = new ArrayList<>();
-        // for (invoiceList item : invoiceList) {
-        // invoiceListIds.add(item.getId());
-        // }
-        // result.put("invoiceListIds", invoiceListIds);
         return result;
     }
 
