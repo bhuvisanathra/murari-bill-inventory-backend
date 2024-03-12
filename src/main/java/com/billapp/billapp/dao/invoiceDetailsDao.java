@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.*;
 
 import com.billapp.billapp.entities.*;
 
-public interface invoiceDetailsDao extends JpaRepository<invoiceDetails,Integer>{
-} 
+public interface invoiceDetailsDao extends JpaRepository<invoiceDetails, Long> {
+}

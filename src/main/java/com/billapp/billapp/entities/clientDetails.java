@@ -1,6 +1,5 @@
 package com.billapp.billapp.entities;
 
-
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
@@ -13,9 +12,10 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "client_details")
 public class clientDetails {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "client_name")
@@ -23,19 +23,19 @@ public class clientDetails {
 
     @Column(name = "client_address")
     private String clientAddress;
-    
+
     @Column(name = "clientgst")
     private String clientGST;
-    
+
     @Column(name = "clientpos")
     private String clientPOS;
-    
+
     @Column(name = "client_state")
     private String clientState;
-    
+
     @Column(name = "client_state_code")
     private String clientStateCode;
-    
+
     @Column(name = "invoiceDate")
     private Date invoiceDate;
 
@@ -50,8 +50,9 @@ public class clientDetails {
     // Default constructor
     public clientDetails() {
     }
-    
-    public clientDetails(Long id, String ClientName, String ClientAddress, String clientGST, String clientPOS, String clientState, String clientStateCode, Date invoiceDate) {
+
+    public clientDetails(Long id, String ClientName, String ClientAddress, String clientGST, String clientPOS,
+            String clientState, String clientStateCode, Date invoiceDate) {
         this.id = id;
         this.clientName = ClientName;
         this.clientAddress = ClientAddress;
@@ -76,7 +77,6 @@ public class clientDetails {
             this.invoiceDate = null;
         }
     }
-
 
     public Long getId() {
         return this.id;
@@ -153,18 +153,18 @@ public class clientDetails {
     @Override
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
-            ", clientName='" + getClientName() + "'" +
-            ", clientAddress='" + getClientAddress() + "'" +
-            ", clientGST='" + getClientGST() + "'" +
-            ", clientPOS='" + getClientPOS() + "'" +
-            ", clientState='" + getClientState() + "'" +
-            ", clientStateCode='" + getClientStateCode() + "'" +
-            ", clientDate='" + getClientDate() + "'" +
-            ", invoiceDetails='" + getInvoiceDetails() + "'" +
-            "}";
+                " id='" + getId() + "'" +
+                ", clientName='" + getClientName() + "'" +
+                ", clientAddress='" + getClientAddress() + "'" +
+                ", clientGST='" + getClientGST() + "'" +
+                ", clientPOS='" + getClientPOS() + "'" +
+                ", clientState='" + getClientState() + "'" +
+                ", clientStateCode='" + getClientStateCode() + "'" +
+                ", clientDate='" + getClientDate() + "'" +
+                ", invoiceDetails='" + getInvoiceDetails() + "'" +
+                "}";
     }
-    
+
     public List<invoiceList> getInvoices() {
         return invoices;
     }

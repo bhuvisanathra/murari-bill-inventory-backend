@@ -10,60 +10,41 @@ import com.billapp.billapp.entities.*;
 import com.billapp.billapp.services.*;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:5173", "https://muraribhuvi.netlify.app"})
+@CrossOrigin(origins = { "http://localhost:5173", "https://muraribhuvi.netlify.app" })
 public class BillController {
 
     @Autowired
-    private invoiceServices invoiceServices; 
-    
+    private invoiceServices invoiceServices;
+
     // Display all the bills
-    
+
     @GetMapping("/invoices")
-    public List<InvoiceDetailsDTO> getInvoices(){
+    public List<InvoiceDetailsDTO> getInvoices() {
         return this.invoiceServices.getInvoiceDetails();
     }
 
     // Get invoice by id
     @GetMapping("/invoices/{invoiceId}")
-    public InvoiceDetailsDTO getInvoiceDetail(@PathVariable int invoiceId){
-            return this.invoiceServices.getInvoiceDetail(invoiceId);
+    public InvoiceDetailsDTO getInvoiceDetail(@PathVariable int invoiceId) {
+        return this.invoiceServices.getInvoiceDetail(invoiceId);
     }
 
     @PostMapping("/invoices")
-    public ResponseEntity<Long> addInvoiceDetail(@RequestBody Map<String, Object> payload) {
-
-        Map<String, Object> clientDetailsMap = (Map<String, Object>) payload.get("clientDetails");
-        Map<String, Object> invoiceDetailsMap = (Map<String, Object>) payload.get("invoiceDetails");
-        
-        clientDetails clientDetails = new clientDetails(clientDetailsMap);
-        invoiceDetails invoiceDetails = new invoiceDetails(invoiceDetailsMap);
-        List<Map<String, Object>> invoiceListMap = (List<Map<String, Object>>) payload.get("invoiceList");
-        
-        // System.out.println(invoiceListMap);
-        
-        List<invoiceList> invoiceList = new ArrayList<>();
-        
-        if (invoiceListMap != null) {
-            for (Map<String, Object> item : invoiceListMap) {
-                invoiceList.add(new invoiceList(item));
-            }
-        }
-        
-        Long clientId = this.invoiceServices.saveInvoiceDetails(clientDetails, invoiceDetails, invoiceList);
-        return ResponseEntity.ok(clientId);
-    }   
-
-
-    //Update the invoice
-    @PutMapping("/invoices")
-    public clientDetails updateInvoiceDetail(@RequestBody clientDetails InvoiceDetail){
-        return this.invoiceServices.updateInvoiceDetail(InvoiceDetail);
+    public ResponseEntity<Map<String, Object>> addInvoiceDetail(@RequestBody Map<String, Object> payload) {
+        return ResponseEntity.ok(this.invoiceServices.saveInvoiceDetails(payload));
     }
 
-    
-    //Delete the invoice
+    // Update the invoice
+    @PutMapping("/invoices/{clientId}")
+    public ResponseEntity<Long> updateInvoiceDetail(@PathVariable Long clientId,
+            @RequestBody Map<String, Object> payload) {
+                System.out.println("\n\n\nPayload"+payload+"\n\n\n");
+        return ResponseEntity.ok(this.invoiceServices.updateInvoiceDetail(clientId, payload));
+    }
+
+    // Delete the invoice
     @DeleteMapping("/invoices/{invoiceId}")
-    public void deleteInvoiceDetail(@PathVariable Long invoiceId){
+    public void deleteInvoiceDetail(@PathVariable Long invoiceId) {
         this.invoiceServices.deleteInvoiceDetail(invoiceId);
     }
 }
