@@ -13,6 +13,12 @@ public interface invoiceServices {
 
     public InvoiceDetailsDTO getInvoiceDetail(int invoiceId);
 
+    public List<InvoiceDetailsDTO> getBillAnalysis();
+
+    public List<InvoiceDetailsDTO> getProductAnalysis();
+    public List<InvoiceDetailsDTO> getSaleAnalysis();
+
+
     public clientDetails addInvoiceDetail(clientDetails InvoiceDetail);
 
     public Long updateInvoiceDetail(Long ClientId, Map<String, Object> payload);

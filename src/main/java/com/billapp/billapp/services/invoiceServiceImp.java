@@ -1,6 +1,6 @@
 package com.billapp.billapp.services;
 
-import java.sql.Date;
+    import java.sql.Date;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
@@ -82,6 +82,91 @@ public class invoiceServiceImp implements invoiceServices {
         }
         return invoiceDetailsMap.values().iterator().next();
     }
+
+    @Override
+    public List<InvoiceDetailsDTO> getBillAnalysis() {
+        String jpql = "SELECT c, id, il FROM clientDetails c "
+                + "LEFT JOIN c.invoiceDetails id "
+                + "LEFT JOIN c.invoices il "
+                + "WHERE id.grandTotal IN "
+                + "(SELECT MAX(id.grandTotal) FROM invoiceDetails id GROUP BY id.clientDetails) "
+                + "ORDER BY id.grandTotal DESC"; // Adding ORDER BY clause to sort by grandTotal in descending order
+        List<Object[]> resultList = entityManager.createQuery(jpql).getResultList();
+
+        Map<Long, InvoiceDetailsDTO> invoiceDetailsMap = new HashMap<>();
+
+        for (Object[] result : resultList) {
+            clientDetails clientDetails = (clientDetails) result[0];
+            invoiceDetails invoiceDetails = (invoiceDetails) result[1];
+            invoiceList invoiceListItem = (invoiceList) result[2];
+            if (!invoiceDetailsMap.containsKey(clientDetails.getId())) {
+                InvoiceDetailsDTO dto = new InvoiceDetailsDTO();
+                dto.setCd(clientDetails);
+                dto.setId(invoiceDetails);
+                dto.setIl(new ArrayList<>());
+                invoiceDetailsMap.put(clientDetails.getId(), dto);
+            }
+            invoiceDetailsMap.get(clientDetails.getId()).getIl().add(invoiceListItem);
+        }
+        return new ArrayList<>(invoiceDetailsMap.values());
+    }
+
+
+
+    @Override
+    public List<InvoiceDetailsDTO> getProductAnalysis() {
+        String jpql = "SELECT il.productDetail, SUM(il.value), SUM(il.kgOrGram) FROM invoiceList il GROUP BY il.productDetail ORDER BY il.productDetail DESC";
+        Query query = entityManager.createQuery(jpql);
+        List<Object[]> resultList = query.getResultList();
+
+        List<InvoiceDetailsDTO> productAnalysisList = new ArrayList<>();
+
+        for (Object[] result : resultList) {
+            String productDetail = (String) result[0];
+            Double totalValue = (Double) result[1]; // Assuming value is of type Double
+            Double totalQuantity = (Double) result[2]; // Assuming kgOrGram is of type Double
+
+            // Create a new InvoiceDetailsDTO object
+            InvoiceDetailsDTO dto = new InvoiceDetailsDTO();
+            dto.setProductDetail(productDetail);
+            // Set the total value and total quantity
+            dto.setTotalValue(totalValue);
+            dto.setTotalQuantity(totalQuantity);
+
+            // Add the DTO to the list
+            productAnalysisList.add(dto);
+        }
+
+        return productAnalysisList;
+    }
+
+    @Override
+    public List<InvoiceDetailsDTO> getSaleAnalysis() {
+        String jpql = "SELECT COUNT(id.clientDetails), id.paymentType, SUM(id.grandTotal) FROM invoiceDetails id  GROUP BY id.paymentType";
+        Query query = entityManager.createQuery(jpql);
+        List<Object[]> resultList = query.getResultList();
+
+        List<InvoiceDetailsDTO> saleAnalysisList = new ArrayList<>();
+
+        for (Object[] result : resultList) {
+            Long clientCount = (Long) result[0];
+            String paymentType = (String) result[1];
+            Double totalGrandTotal = (Double) result[2]; // Assuming grand_total is of type Double
+
+            // Create a new InvoiceDetailsDTO object
+            InvoiceDetailsDTO dto = new InvoiceDetailsDTO();
+            dto.setClientCount(clientCount);
+            dto.setPaymentType(paymentType);
+            dto.setTotalGrandTotal(totalGrandTotal);
+
+            // Add the DTO to the list
+            saleAnalysisList.add(dto);
+        }
+
+        return saleAnalysisList;
+    }
+
+
 
     @Override
     public clientDetails addInvoiceDetail(clientDetails InvoiceDetail) {

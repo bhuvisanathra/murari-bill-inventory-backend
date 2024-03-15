@@ -28,6 +28,23 @@ public class BillController {
         return this.invoiceServices.getInvoiceDetail(invoiceId);
     }
 
+    // Get the Most saled bill list
+    @GetMapping("/analysis/client")
+    public List<InvoiceDetailsDTO> getBillAnalysis() {
+        return this.invoiceServices.getBillAnalysis();
+    }
+
+    @GetMapping("/analysis/product")
+    public List<InvoiceDetailsDTO> getProductAnalysis() {
+        return this.invoiceServices.getProductAnalysis();
+    }
+
+
+    @GetMapping("/analysis/sale")
+    public List<InvoiceDetailsDTO> getSaleAnalysis() {
+        return this.invoiceServices.getSaleAnalysis();
+    }
+
     @PostMapping("/invoices")
     public ResponseEntity<Map<String, Object>> addInvoiceDetail(@RequestBody Map<String, Object> payload) {
         return ResponseEntity.ok(this.invoiceServices.saveInvoiceDetails(payload));
