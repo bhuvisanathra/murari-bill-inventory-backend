@@ -9,6 +9,7 @@ import com.billapp.billapp.dto.InvoiceDetailsDTO;
 import com.billapp.billapp.services.*;
 
 @RestController
+@RequestMapping("/user")
 @CrossOrigin(origins = { "http://localhost:5173", "https://muraribhuvi.netlify.app" })
 public class BillController {
 
