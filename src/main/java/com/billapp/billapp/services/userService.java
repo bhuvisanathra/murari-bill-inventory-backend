@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -23,4 +24,14 @@ public class userService implements UserDetailsService {
         System.out.println("In the user detail service");
         return userDao.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User doesnot Exists"));
     }
+
+    public List<ApplicationUser> getAllUsers(){
+        return userDao.findAll();
+    }
+
+    public void deleteById(Integer id){
+        userDao.deleteById(id);
+    }
+
+
 }
