@@ -17,7 +17,7 @@ import java.util.Set;
 
 @SpringBootApplication
 @Import(CorsConfig.class)
-@PropertySource("classpath:env.properties")
+//@PropertySource("classpath:env.properties")
 public class BillServer {
 
 	public static void main(String[] args) {
