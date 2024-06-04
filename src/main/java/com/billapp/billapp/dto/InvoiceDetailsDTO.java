@@ -106,6 +106,6 @@ public class InvoiceDetailsDTO {
                 ", clientCount=" + clientCount +
                 ", paymentType='" + paymentType + '\'' +
                 ", totalGrandTotal=" + totalGrandTotal +
-                '}';
+                '}.';
     }
 }
